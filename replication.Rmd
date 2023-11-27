@@ -1,0 +1,28 @@
+---
+title: "Replication Notebook"
+output: html_notebook
+
+
+```{r packages}
+
+library("tidyverse")
+library("RColorBrewer")
+library("gridExtra")
+library("languageR")
+library("broom")
+library("GGally")
+library("car")
+library("arm")
+library("forcats")
+library("rcompanion")
+
+```
+ 
+
+```{r load}
+
+s1_data = read_csv("./data/S1_Data.csv")
+s2_data = read_csv("./data/S2_Data.csv")
+
+```
+
