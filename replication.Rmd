@@ -15,6 +15,7 @@ library("car")
 library("arm")
 library("forcats")
 library("rcompanion")
+library("MuMIn")
 ```
  
 
@@ -385,5 +386,104 @@ tmp_data$residRating = resid(
 
 plot_line_f5(tmp_data, 5)
 
+
+```
+
+
+
+```{r Extension}
+
+extension_data = s1_data %>% 
+  drop_na() %>%
+  dplyr::select(word, lexicalCategory, X30mos, phonemes, concreteness, logFreq, systematicity, babyAVG) %>%
+  group_by(word) %>%
+  summarize(
+    systematicity = mean(systematicity),
+    lexicalCategory = max(lexicalCategory),
+    X30mos = mean(X30mos),
+    phonemes = mean(phonemes),
+    concreteness = mean(concreteness),
+    logFreq = mean(logFreq),
+    babyAVG = mean(babyAVG)
+  )
+
+
+feature_data = extension_data %>% 
+  dplyr::select(lexicalCategory, X30mos, phonemes, concreteness, logFreq, babyAVG)
+
+hist(extension_data$systematicity)
+```
+
+```{r Extension 2}
+extension_lm1 = extension_data %>%
+  lm(systematicity ~ lexicalCategory + X30mos + phonemes + concreteness + logFreq + babyAVG,
+     data = .)
+
+summary(extension_lm1)
+```
+
+```{r}
+vif(extension_lm1)
+```
+
+
+```{r}
+collin.fnc(extension_data %>% dplyr::select(X30mos, phonemes, concreteness, logFreq, babyAVG))$cnumber
+```
+
+
+```{r}
+feature_data %>% 
+  ggpairs(., lower = list(continuous = wrap("smooth_loess", size = 0.5)))
+```
+
+
+```{r}
+extension_lm2 = extension_data %>%
+  lm(systematicity ~ lexicalCategory + phonemes + logFreq + babyAVG,
+     data = .)
+
+summary(extension_lm2)
+```
+
+
+
+
+```{r}
+
+extension_lm3 = extension_data %>%
+  lm(systematicity ~ lexicalCategory + X30mos + logFreq,
+     data = .)
+
+summary(extension_lm3)
+
+```
+
+
+
+```{r}
+
+AIC(extension_lm2, extension_lm3)
+AICc(extension_lm2, extension_lm3)
+BIC(extension_lm2, extension_lm3)
+
+```
+
+
+```{r}
+
+par(mfrow = c(2, 2))
+plot(extension_lm2)
+
+```
+
+```{r}
+extension_data$residSystematicity = resid(
+  lm(data = extension_data, systematicity ~ lexicalCategory + logFreq + babyAVG)
+)
+
+extension_data %>%
+  ggplot(., aes(x = phonemes, y = residSystematicity)) + geom_point() +
+  stat_smooth(method = "lm")
 
 ```
