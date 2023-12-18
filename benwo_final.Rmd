@@ -14,7 +14,7 @@ output:
 
 In "Iconicity in English and Spanish and Its Relation to Lexical Category and Age of Acquisition," Perry et al. responded to the common hypothesis that Indo-European languages are "arbitrary outside of a small number of onomatopoeic words." They tested this hypothesis by tasking subjects to rate the iconicity of English and Spanish words in a variety of different contexts. They then built linear mixed effects models that related the subjects' ratings to word characteristics, including age of acquisition and lexical category. They ultimately found that both of these characteristics were significant predictors; most notably, they found that words learned earlier were more iconic, suggesting that iconicity is an "important property" of Indo-European languages.
 
-In this project, I replicate and extend Perry et al.'s methods. Specifically, I reproduce the four main plots (and thus, models) included in the original report. I then use the supplied data to conduct a similar investigation in which word characteristics are used to predict systematicity (rather than iconicity). The resulting linear models demonstrate that age of acquisition and lexical category are poor predictors of systematicity. Hence iconicity seems to be the primary form of non-arbitrariness that these characteristics can predict.
+In this project, I replicate and extend Perry et al.'s methods. Specifically, I reproduce the four main figures (and thus, models) included in the original report. I then use the supplied data to conduct a similar investigation in which word characteristics are used to predict systematicity (rather than iconicity). The resulting linear models demonstrate that age of acquisition is a poor predictor of systematicity. Hence iconicity seems to be the primary form of non-arbitrariness that these characteristics can predict.
 
 
 ### 2: Data
@@ -83,7 +83,7 @@ s2_data = read_csv("./data/S2_Data.csv")
 
 ### 3: Replication
 
-In this section, I replicate the plots and models included in the original report. Fortunately, Perry et al. included their model definitions in an appendix, so few details are left to guesswork. However, a non-trivial amount of data wrangling is involved.
+In this section, I replicate the figures and models included in the original report. Fortunately, Perry et al. included their model definitions in an appendix, so few details are left to guesswork. However, a non-trivial amount of data wrangling is involved.
 
 #### 3.1: Figure One (Iconicity vs. Lexical Category & Task)
 
@@ -277,6 +277,8 @@ for(group_idx in 1:length(groups)){
 
 ```{r F2c}
 
+# pad cols to make up for missing experiments 
+
 group = c( group, "control_all", "control_all" )
 task = c( task, "infinitive", "conjugated" )
 coef = c( coef, 0, 0 )
@@ -357,7 +359,7 @@ ggplot(figure_three_data,
         aes(fill = AoA, x = iconicity, y = coef, ymin = coef - error, ymax = coef + error)) + 
         geom_bar(position = "dodge", stat = "identity", color = "Black" ) + 
         geom_errorbar(position = "dodge") +
-        labs(x = "Iconicity", y = "Relationship between AoA and Iconicity", title = "Figure Four Replication") +
+        labs(x = "Iconicity", y = "Relationship between AoA and Iconicity", title = "Figure Three Replication") +
         scale_fill_manual(values = brewer.pal(3, "Blues"))
 
 ```
@@ -380,7 +382,7 @@ plot_line_f4 = function(data, exp_num){
   ggplot(tmp_data, aes(x = X30mos, y = residRating)) +
   stat_smooth(method = "lm", level = 0.68) + 
   xlim(20, 100) + 
-  labs(title = sprintf("Experiment %d", exp_num), x = "AoA", y = "Residual Iconicity")
+  labs(title = sprintf("Experiment %d", exp_num), x = "% of Children Saying Word at 30mos", y = "Residual Iconicity")
   
 }
 
@@ -476,8 +478,22 @@ pl1 + pl2 + pl3 + pl4 + pl5 + plot_layout(design = layout) + plot_annotation(tit
 
 #### 3.5: Replication Discussion 
 
+I was able to accurately replicate most of the figures and models. There were a couple of discrepancies, though. The first was that the error bars in figure one did not match those of the original plot. This was especially apparent for the bars from experiment three. Given that this discrepancy was minor, and that the other bars were correct, it seems likely that it was caused by the re-scaling of ratings. Perry et al. did not specify how they scaled the ratings from experiment three, so I had to guess their method. 
+
+The second discrepancy was that the bar heights in figure three did not match those of the original plot. This was especially apparent for the lighter-colored bars. My table of one-to-one translation pairs had more entries than described in the paper (423 vs. 412), so it seems likely that this discrepancy was caused by the joining criteria between the English and Spanish datasets. (Some words, such as `where`, had multiple potential translation pairs). Again, Perry et al. did not specify how to join the datasets, so I had to guess their method. Hence I submit that both discrepancies were minor and were likely caused by inaccurate guesswork.
+
+The replication thus had the same findings as the original report. First, iconicity significantly varied across lexical categories; onomatopoeia were rated as more iconic than all other lexical categories (`p < 0.0001`), and adjectives & verbs more rated as more iconic than nouns & function words (`p < 0.0001`). Second, age of acquisition was a significant predictor of iconicity, regardless of the predictors that were controlled or excluded (`p < 0.0001`, `p = 0.05`, and `p = 0.01`). Third, for both English and Spanish, age of acquisition was a significant predictor of iconicity if the age of acquisition matched the target language. (In other words, English AoA predicted English iconicity but Spanish AoA did not, and vice-versa.) The p-values for this finding were incorrect due to the aformentioned discrepancy, but Perry et al. reported `p < 0.001`, `p = 0.7`, `p < 0.01`, and `p = 0.11`.
+
+As Perry et al. discussed, these findings (somewhat controversially) imply that iconicity has an important role in Indo-European languages; if these languages were truly arbitrary, then these significant relationships would not exist. The are a few specific implications, too. For one, the clear relationship between iconicity and age of acquisition might imply that iconicity exists to aid word learning. Additionally, the use of a continuous scale in measuring iconicity might also imply that a binary conception of iconicity is incomplete. Regardless, Perry et al. aptly pointed out that although these findings reveal the prevalence of iconicity, they do not reveal the mechanisms that cause the iconicity in the first place. This is one limitation that can be addressed in future work.
+
+
 
 ### 4: Extension (Systematicity vs. Age of Acquisition)
+
+To extend the original report, I conduct a experiment that attempts to predict systematicity, rather than iconicity, using age of acquisition and various word characteristics. The goal of this extension is to determine whether age of acquisition affects types of non-arbitrariness other than iconicity (i.e., systematicity). This finding can inform future investigations into the mechanisms that cause iconicity, especially those that examine the role of iconicity in word learning.
+
+To conduct this experiment, I first group the English dataset by `word`. (I only consider the English dataset because the Spanish dataset does not contain systematicity ratings.):
+
 
 ```{r Ea}
 
@@ -502,11 +518,15 @@ feature_data = extension_data %>%
 head(feature_data)
 
 ```
+<br>
+I then construct a pair plot so that I can identify a set of non-colinear features that includes age of acquisition (`X30mos`). This yields the feature set containing age of acquisition, lexical category, and log-frequency, since all of the other features are significantly correlated with age of acquisition. (Note that these collinearities do not undermine the results of Perry et al. because these features were used as controls. Thus the model only generated residuals and it's coefficients were not considered.):
+
 ```{r,warning=FALSE,message=FALSE,Eb}
 feature_data %>% 
   ggpairs(., lower = list(continuous = wrap("smooth_loess", size = 0.5)))
 ```
-
+<br><br>
+I then build two linear models: one that contains age of acquisition, and one that does not. The latter will be used to test for significance:
 
 ```{r Ec}
 extension_lm_null = extension_data %>%
@@ -518,19 +538,25 @@ extension_lm = extension_data %>%
      data = .)
 ```
 
+<br><br>
+Next, I check model assumptions. Both models seem adequate. The residuals vs. fitted plots are flat and the leverage plots are within the contours. The q-q residual plots and the scale-location plots aren't ideal -- mostly due to a few extreme values in the tails -- but they seem good enough to proceed. (It might be prudent to examine and exclude these extreme values, but this is not something I look into.)
+
+
 ```{r Ed}
 
 par(mfrow = c(2, 2))
 plot(extension_lm_null)
 
 ```
-
 ```{r Ee}
 
 par(mfrow = c(2, 2))
 plot(extension_lm)
 
 ```
+<br><br>
+Next, I check for collinearity. The VIF are less than 10, indicating low collinearity, while the condition number is 12, indicating medium collinearity. The feature set passes the correlation test (because that's how I chose it), so I ultimately proceed without eliminating features:
+
 
 ```{r Ef}
 vif(extension_lm)
@@ -540,29 +566,41 @@ vif(extension_lm)
 ```{r,warning=FALSE,message=FALSE,Eg}
 collin.fnc(extension_data %>% dplyr::select(X30mos, logFreq))$cnumber
 ```
-
+<br><br>
+Finally, I replicate Perry et al.'s methods by running an ANOVA comparison between the two models. This reveals that the model including age of acquisition does not outperform the null model `p = 0.14 > 0.05`. Hence age of acquisition is not a significant predictor of systematicity.
 
 ```{r Eh}
 anova(extension_lm_null, extension_lm)
 
 ```
+<br><br>
+I visually confirm this result by plotting the residuals of the null model vs. age of acquisition:
 
 ```{r Ei}
-extension_data$resids = resid( 
-    lm(systematicity ~ lexicalCategory + logFreq, data = extension_data)
-  )
+extension_data$resids = resid( extension_lm_null )
 
 extension_data %>%
   ggplot(aes(x = X30mos, y = resids)) + 
   geom_point() +
   stat_smooth(method = "lm") + 
-  labs(title = "Residual Systematicity vs. AoA", x = "AoA", y = "Residual Systematicity")
+  labs(title = "Residual Systematicity vs. Age of Acquisition", x = "% of Children Saying Word at 30mos", y = "Residual Systematicity")
 ```
+
+<br><br>
+The result is that age of acquisition does not predict systematicity. This demonstrates that the relationship between iconicity and age of acquisition is unique in that other forms of non-arbitrariness (e.g., systematicity) are not more common in early-acquired words. In other words, it seems like age of acquisition can predict iconicity, but not non-arbitrariness *in general*. This could be interpreted as evidence that iconicity's role in Indo-European languages is to aid word learning (simply because the relationship is unique). Hence this finding motivates further investigation into this interpretation of Perry et al.'s results.
+
+Of course, it goes without saying that other interpretations are possible. It may be that age of acquisition influences iconicity by a mechanism that is completely independent from word learning. However, the fact that age of acquisition is uniquely predictive of one type of arbitrariness (iconicity) and not the other (systematicity) suggests that iconicity is closely related to how children learn words.
+
 
 ### 4: Conclusion 
 
+In this project, I replicated and extended Perry et al.'s methods. Specifically, I reproduced the four main figures included in the original report. I then used the supplied data to build linear models and show that age of acquisition has no relationship to systematicity. Together, these efforts suggest that iconicity has an important role in Indo-European languages and may be related to how children learn words.
 
-### 5: Appendix
+### 5: References
+
+Perry LK, Perlman M, Lupyan G (2015) Iconicity in English and Spanish and Its Relation to Lexical Category and Age of Acquisition. PLoS ONE 10(9): e0137147. [https://doi.org/10.1371/journal.pone.0137147](https://doi.org/10.1371/journal.pone.0137147)
+
+### 6: Appendix
 
 To see all of the files associated with this project, please visit [https://github.com/BenWonderlin/linguistics_final](https://github.com/BenWonderlin/linguistics_final).
-All code (including silenced chunks and package requirements) can be found in benwo_final.Rmd.
+All code (including silenced chunks and package requirements) can be found in `benwo_final.Rmd`.
