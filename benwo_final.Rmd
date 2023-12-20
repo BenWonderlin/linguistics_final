@@ -54,7 +54,7 @@ Perry et al. published two datasets alongside their findings. One dataset only c
 
 #### 2.3 Iconicity Ratings
 
-As implied in the previous sections, Perry et al. collected iconicity ratings in a number of different experiments or "tasks." The first three were conducted with English words and native English speakers, while the last two were conducted with Spanish words and native Spanish speakers. These experiments are described below
+As implied in the previous sections, Perry et al. collected iconicity ratings in a number of different experiments or "tasks." The first three were conducted with English words and native English speakers, while the last two were conducted with Spanish words and native Spanish speakers. These experiments are described below.
 
 - Experiment 1 (English, Written): Participants viewed a word, said the word aloud, and then provided an iconicity rating between -5 and 5 (where a 5 corresponded to high iconicity)
 - Experiment 2 (English, Auditory): Participants viewed a word, listened to a native speaker say the word, and then provided an iconicity rating between -5 and 5.
@@ -480,7 +480,7 @@ pl1 + pl2 + pl3 + pl4 + pl5 + plot_layout(design = layout) + plot_annotation(tit
 
 I was able to accurately replicate most of the figures and models. There were a couple of discrepancies, though. The first was that the error bars in figure one did not match those of the original plot. This was especially apparent for the bars from experiment three. Given that this discrepancy was minor, and that the other bars were correct, it seems likely that it was caused by the re-scaling of ratings. Perry et al. did not specify how they scaled the ratings from experiment three, so I had to guess their method. 
 
-The second discrepancy was that the bar heights in figure three did not match those of the original plot. This was especially apparent for the lighter-colored bars. My table of one-to-one translation pairs had more entries than described in the paper (423 vs. 412), so it seems likely that this discrepancy was caused by the joining criteria between the English and Spanish datasets. (Some words, such as `where`, had multiple potential translation pairs). Again, Perry et al. did not specify how to join the datasets, so I had to guess their method. Hence I submit that both discrepancies were minor and were likely caused by inaccurate guesswork.
+The second discrepancy was that the bar heights in figure three did not match those of the original plot. This was especially apparent for the lighter-colored bars. My table of one-to-one translation pairs had more entries than described in the paper (423 vs. 412), so it seems likely that this discrepancy was caused by the joining criteria between the English and Spanish datasets. (Some words, such as `where`, had multiple potential translation pairs.) Again, Perry et al. did not specify how to join the datasets, so I had to guess their method. Hence I submit that both discrepancies were minor and were likely caused by inaccurate guesswork.
 
 The replication thus had the same findings as the original report. First, iconicity significantly varied across lexical categories; onomatopoeia were rated as more iconic than all other lexical categories (`p < 0.0001`), and adjectives & verbs more rated as more iconic than nouns & function words (`p < 0.0001`). Second, age of acquisition was a significant predictor of iconicity, regardless of the predictors that were controlled or excluded (`p < 0.0001`, `p = 0.05`, and `p = 0.01`). Third, for both English and Spanish, age of acquisition was a significant predictor of iconicity if the age of acquisition matched the target language. (In other words, English AoA predicted English iconicity but Spanish AoA did not, and vice-versa.) The p-values for this finding were incorrect due to the aformentioned discrepancy, but Perry et al. reported `p < 0.001`, `p = 0.7`, `p < 0.01`, and `p = 0.11`.
 
@@ -490,7 +490,7 @@ As Perry et al. discussed, these findings (somewhat controversially) imply that 
 
 ### 4: Extension (Systematicity vs. Age of Acquisition)
 
-To extend the original report, I conduct a experiment that attempts to predict systematicity, rather than iconicity, using age of acquisition and various word characteristics. The goal of this extension is to determine whether age of acquisition affects types of non-arbitrariness other than iconicity (i.e., systematicity). This finding can inform future investigations into the mechanisms that cause iconicity, especially those that examine the role of iconicity in word learning.
+To extend the original report, I conduct a experiment that attempts to predict systematicity, rather than iconicity, using age of acquisition and various word characteristics. The goal of this extension is to determine whether age of acquisition affects types of non-arbitrariness other than iconicity (i.e., systematicity). This finding can inform future investigations into the mechanisms that lead to iconicity, especially those that examine the role of iconicity in word learning.
 
 To conduct this experiment, I first group the English dataset by `word`. (I only consider the English dataset because the Spanish dataset does not contain systematicity ratings.):
 
@@ -587,14 +587,14 @@ extension_data %>%
 ```
 
 <br><br>
-The result is that age of acquisition does not predict systematicity. This demonstrates that the relationship between iconicity and age of acquisition is unique in that other forms of non-arbitrariness (e.g., systematicity) are not more common in early-acquired words. In other words, it seems like age of acquisition can predict iconicity, but not non-arbitrariness *in general*. This could be interpreted as evidence that iconicity's role in Indo-European languages is to aid word learning (simply because the relationship is unique). Hence this finding motivates further investigation into this interpretation of Perry et al.'s results.
+The result is that age of acquisition does not predict systematicity. This demonstrates that the relationship between iconicity and age of acquisition is unique in that other forms of non-arbitrariness (e.g., systematicity) are not more common in early-acquired words. In other words, it seems that age of acquisition can predict iconicity but not non-arbitrariness *in general*. This could be interpreted as evidence that iconicity's role in Indo-European languages is to aid word learning (simply because this relationship is unique). Hence this finding motivates further investigation into this interpretation of Perry et al.'s results.
 
-Of course, it goes without saying that other interpretations are possible. It may be that age of acquisition influences iconicity by a mechanism that is completely independent from word learning. However, the fact that age of acquisition is uniquely predictive of one type of arbitrariness (iconicity) and not the other (systematicity) suggests that iconicity is closely related to how children learn words.
+Of course, it goes without saying that other interpretations are possible. It may be that age of acquisition influences iconicity through a mechanism that is completely independent from word learning. However, the fact that age of acquisition is uniquely predictive of one type of arbitrariness (iconicity) and not the other (systematicity) suggests that iconicity is closely related to how children learn words.
 
 
 ### 4: Conclusion 
 
-In this project, I replicated and extended Perry et al.'s methods. Specifically, I reproduced the four main figures included in the original report. I then used the supplied data to build linear models and show that age of acquisition has no relationship to systematicity. Together, these efforts suggest that iconicity has an important role in Indo-European languages and may be related to how children learn words.
+In this project, I replicated and extended Perry et al.'s methods. Specifically, I reproduced the four main figures included in the original report. I then repurposed the supplied data to show that age of acquisition has no relationship to systematicity. Together, these efforts suggested that iconicity has an important role in Indo-European languages and may ultimately be related to how children learn words.
 
 ### 5: References
 
@@ -603,4 +603,4 @@ Perry LK, Perlman M, Lupyan G (2015) Iconicity in English and Spanish and Its Re
 ### 6: Appendix
 
 To see all of the files associated with this project, please visit [https://github.com/BenWonderlin/linguistics_final](https://github.com/BenWonderlin/linguistics_final).
-All code (including silenced chunks and package requirements) can be found in `benwo_final.Rmd`.
+All code (including silenced chunks and required packages) can be found in `benwo_final.Rmd`.
